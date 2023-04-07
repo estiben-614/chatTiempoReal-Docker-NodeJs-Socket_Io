@@ -1,8 +1,8 @@
 # NodeJS container Docker
 
-## First Version, is not finished yet :D ##
+## Second version, is not finished yet but now it works better :D ##
 
-![image](https://user-images.githubusercontent.com/92930895/230559306-cee2c71d-339b-4b37-b078-08fa1c69aa07.png)
+![image](https://user-images.githubusercontent.com/92930895/230648092-74518f2d-59d5-454d-8763-f980910886f7.png)
 
 
 ## Running on Windows (Temporal solution) ##
