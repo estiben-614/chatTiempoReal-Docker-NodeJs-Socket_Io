@@ -1,5 +1,9 @@
 # NodeJS container Docker
 
+##First Version, is not finished yet :D
+![image](https://user-images.githubusercontent.com/92930895/230559306-cee2c71d-339b-4b37-b078-08fa1c69aa07.png)
+
+
 ## Running on Windows (Temporal solution) ##
 - First build the container:
 ```
