@@ -2,26 +2,85 @@
 <html>
   <head>
     <title>Socket.IO chat</title>
-    <style>
-      
+<style>
+   /* Estilo del cuerpo */
+   body {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-color: #f7f7f7;
+        font-family: sans-serif;
+      }
 
-    </style>
+      /* Estilo del contenedor del chat */
+      #messages {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        align-items: flex-start;
+        background-color: #ffffff;
+        border-radius: 10px;
+        padding: 20px;
+        width: 90%;
+        max-width: 600px;
+        height: 70%;
+        max-height: 500px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        overflow-y: scroll;
+        margin-bottom: 20px;
+      }
+
+      /* Estilo del campo de entrada de texto */
+      #message {
+        width: 90%;
+        max-width: 600px;
+        height: 50px;
+        max-height: 70%;
+        padding: 10px;
+        border-radius: 25px;
+        border: none;
+        background-color: #eeeeee;
+        margin-bottom: 10px;
+        font-size: 16px;
+        color: #444444;
+      }
+
+      /* Estilo del botón de enviar */
+      #btn {
+        width: 90%;
+        max-width: 600px;
+        height: 50px;
+        padding: 10px;
+        border-radius: 25px;
+        border: none;
+        background-color: #3b5998;
+        color: #ffffff;
+        font-size: 16px;
+        cursor: pointer;
+      }
+
+      /* Estilo para el texto de los mensajes */
+      .message-text {
+        font-size: 16px;
+        color: #444444;
+        margin-bottom: 10px;
+      }
+
+  </style>
   </head>
   
   <body>
-      <div id="container">
+     
         <div id="messages">
-          <div id="actions"></div>
-  
         
         </div>
-      </div>
-      <input id="username" autocomplete="off" placeholder="username"/>
       <input id="message" autocomplete="off" placeholder="message"/>
       
       <button id="btn">Send</button>
 
-
+      </body>
     <script src="/socket.io/socket.io.js"></script>
 <script>
 
@@ -30,20 +89,20 @@
     let  socket = io();
     
 
-let username = document.getElementById('username');
 let message = document.getElementById('message');
 let boton=document.getElementById('btn')
 let divMessages=document.getElementById('messages')
-let actions=document.getElementById('actions')
 
 
+let usuario=prompt('Por favor ingrese un nombre de usuario : ')
+//Enviamos el usuario al servidor con el evento nombreUsuario
+socket.emit('nombreUsuario',usuario)
 
 //Evento del cliente al servidor 
 boton.addEventListener('click',function(){
-  //Le enviamos los datos al servidor con el evento
+  //Le enviamos los datos del mensaje al servidor con el evento
   socket.emit('infoClient',{
     message:message.value,
-    username:username.value
   })
 })
 
@@ -54,24 +113,17 @@ socket.on('infoServidor', function(data){
   
 
 })
-//Evento cliente a servidor que detecta cuando se está escribiendo un mensaje y envia al servidor el username
-message.addEventListener('keypress',function(){
-  socket.emit('typingClient',username.value)
-})
-
-//Escucha el evento desde el servidor y lo muestra en el div 
-socket.on('typingServidor',function(data){
-  actions.innerHTML=`<p> ${data} is typing`
-})
-
 //Desconexion del usuario
 socket.on('disconnect2',function(data){
-  actions.innerHTML+= `<p> ${data} </p>`
+  divMessages.innerHTML+= `<p> ${data} </p>`
 })
 
-socket.on('connectionUser', function(data){
-  actions.innerHTML+= `<p>${data}</p>`
+
+socket.on('connection_user',function(data){
+  divMessages.innerHTML+= `<p>${data}</p>`
 })
+
+sock
 </script>
   </body>
   

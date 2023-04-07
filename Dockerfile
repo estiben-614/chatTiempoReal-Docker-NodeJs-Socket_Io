@@ -8,4 +8,6 @@ RUN chmod +x /autostart.sh
 CMD ["sh", "autostart.sh"]
 
 # docker run -it -p 3000:3000 --volume ${PWD}/app:/app --name=node_project_container --rm node_docker
+#docker build -t node_project_container .
+
 #docker exec -it node_project_container ./bin/bash
