@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Socket.IO chat</title>
+    <style>
+      
+
+    </style>
+  </head>
+  
+  <body>
+      <div id="container">
+        <div id="messages">
+          <div id="actions"></div>
+  
+        
+        </div>
+      </div>
+      <input id="username" autocomplete="off" placeholder="username"/>
+      <input id="message" autocomplete="off" placeholder="message"/>
+      
+      <button id="btn">Send</button>
+
+
+    <script src="/socket.io/socket.io.js"></script>
+<script>
+
+
+    //Mantiene la conexion al servidor
+    let  socket = io();
+    
+
+let username = document.getElementById('username');
+let message = document.getElementById('message');
+let boton=document.getElementById('btn')
+let divMessages=document.getElementById('messages')
+let actions=document.getElementById('actions')
+
+
+
+//Evento del cliente al servidor 
+boton.addEventListener('click',function(){
+  //Le enviamos los datos al servidor con el evento
+  socket.emit('infoClient',{
+    message:message.value,
+    username:username.value
+  })
+})
+
+//Escucha el evento desde el servidor y lo muestra en el div
+socket.on('infoServidor', function(data){
+  //join.innerHTML+=`<p>${data.username} has join </p>`
+  divMessages.innerHTML+= `<p> ${data.username} : ${data.message} </p>`
+  
+
+})
+//Evento cliente a servidor que detecta cuando se está escribiendo un mensaje y envia al servidor el username
+message.addEventListener('keypress',function(){
+  socket.emit('typingClient',username.value)
+})
+
+//Escucha el evento desde el servidor y lo muestra en el div 
+socket.on('typingServidor',function(data){
+  actions.innerHTML=`<p> ${data} is typing`
+})
+
+//Desconexion del usuario
+socket.on('disconnect2',function(data){
+  actions.innerHTML+= `<p> ${data} </p>`
+})
+
+socket.on('connectionUser', function(data){
+  actions.innerHTML+= `<p>${data}</p>`
+})
+</script>
+  </body>
+  
+</html>
