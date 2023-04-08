@@ -72,10 +72,17 @@
   </head>
   
   <body>
-     
-        <div id="messages">
-        
+        <div id="users">
+          <h4>Users Online </h4>
+          <ul id="list_users_connected">
+          </ul>
         </div>
+
+          
+          <div id="messages">
+        
+          </div>
+        
       <input id="message" autocomplete="off" placeholder="message"/>
       
       <button id="btn">Send</button>
@@ -92,6 +99,7 @@
 let message = document.getElementById('message');
 let boton=document.getElementById('btn')
 let divMessages=document.getElementById('messages')
+let list_users_connected=document.getElementById('list_users_connected')
 
 
 let usuario=prompt('Por favor ingrese un nombre de usuario : ')
@@ -113,17 +121,33 @@ socket.on('infoServidor', function(data){
   
 
 })
+
+// Usuarios conectados
+socket.on('users_online',(data)=>{
+  //Borramos el historial anterior
+  list_users_connected.innerHTML=''
+
+  //Mostramos el historial de usuarios conectados mas reciente
+  data.forEach(usuario => {
+    const li_user=document.createElement('li')
+    li_user.textContent=usuario.nombre
+    list_users_connected.appendChild(li_user)
+  });
+  
+
+})
+
 //Desconexion del usuario
 socket.on('disconnect2',function(data){
   divMessages.innerHTML+= `<p> ${data} </p>`
 })
 
-
+//Conexion del usuario
 socket.on('connection_user',function(data){
   divMessages.innerHTML+= `<p>${data}</p>`
 })
 
-sock
+
 </script>
   </body>
   

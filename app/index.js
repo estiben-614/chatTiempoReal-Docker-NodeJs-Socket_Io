@@ -23,17 +23,29 @@ socket.on('nombreUsuario',(data)=>{
   }
   const nombreUsuario=data
 
+
+  // io.emit(evento, datos) || io.sockets.emit(evento,datos)=> Envia un mensaje a todos los usuarios conectados, incluyendose
+  // socket.emit(evento, datos) => Envia el mensaje a una sola persona
+  // socket.broadcast.emit(evento, datos)=> Envía un mensaje a todos los sockets conectados al servidor, excepto al propio emisor. 
+
   listadoUsuariosConectados.push(usuario)
   console.log(listadoUsuariosConectados)
+
+  //Mensaje al cliente con el array de los usuarios que hay conectados
+  io.sockets.emit('users_online',listadoUsuariosConectados)
 
   //Mensaje de bienvenida solo a quien se conectó
   socket.emit('connection_user',`Welcome to chat ${usuario.nombre}`)
 
-  //Mensaje para todos menos quien ingrespó 
+  
+  
+  //Mensaje para todos menos quien ingresó 
   socket.broadcast.emit('connection_user',`${usuario.nombre} has join`)
 
-  //Si el id que hay en el listado, corresponde con el actual que da el socket, se envia el mensaje con su nombre
-  //Esto es lo que hace que cada persona tenga su nombre al enviar un mensaje
+  //Cada conexion está identificada con un id y que se puede obtener con socker id
+  // .find() me devuelve el primer usuario que cumpla que el id del servidor (socker.id) sea igual al ID de la persona que envio el mensaje y
+  //que guardamos en cada usuario
+
   if(listadoUsuariosConectados.find((usuario)=>usuario.id==socket.id)){
     //Socket on escucha los eventos, en este caso, el evento infoClient
     socket.on('infoClient',(data)=>{
@@ -57,6 +69,21 @@ socket.on('nombreUsuario',(data)=>{
 
   //Desconexion Cliente
   socket.on('disconnect',()=>{
+    //El servidor indica el ID que se desconectó (socker.id)
+    //La condicion devuelve el primer usuario que cumpla que el ID del servidor  ( que se desconectó) sea igual al ID que tenemos registrado en  usuario
+    if(listadoUsuariosConectados.find((usuario)=>usuario.id==socket.id)){
+      
+      //Devuelve el indice del usuario que se desconectó 
+      const index=listadoUsuariosConectados.indexOf(usuario)
+
+      //Elimina a partir del index el usuario que se desconectó 
+      listadoUsuariosConectados.splice(index)
+      
+      //Envia a todos el nuevo listado de usuarios conectados luego de cada desconexion 
+      io.sockets.emit('users_online',listadoUsuariosConectados)
+
+    }
+
     io.emit('disconnect2',`${usuario.nombre} is disconected`)
   })
 })
@@ -69,4 +96,3 @@ socket.on('nombreUsuario',(data)=>{
 server.listen(3000, () => {
   console.log('listening on *:3000');
 });
-//.bin/
