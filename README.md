@@ -2,6 +2,10 @@
 
 ## Second version, is not finished yet but now it works better :D ##
 
+```
+Upgrade: Now show users online 
+```
+
 ![image](https://user-images.githubusercontent.com/92930895/230648092-74518f2d-59d5-454d-8763-f980910886f7.png)
 
 
